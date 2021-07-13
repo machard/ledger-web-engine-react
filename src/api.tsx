@@ -8,6 +8,8 @@ import RequireDeviceAction from './modals/RequireDeviceAction'
 const api = async (stream: WindowPostMessageStream, data: any) => {
   console.log('lw engine api request', data)
 
+  let transport, result
+
   switch (data.type + '/' + data.method) {
     case 'devices/requireApp':
       setModal(RequireApp, {
@@ -45,8 +47,7 @@ const api = async (stream: WindowPostMessageStream, data: any) => {
       break
 
     case 'devices/send':
-      // eslint-disable-next-line no-case-declarations
-      const transport = getTransport()
+      transport = getTransport()
       if (!transport) {
         stream.write({
           id: data.id,
@@ -61,8 +62,6 @@ const api = async (stream: WindowPostMessageStream, data: any) => {
         data.args[4] = Buffer.alloc(0)
       }
 
-      // eslint-disable-next-line no-case-declarations
-      let result
       try {
         // @ts-ignore
         result = await transport.send(...data.args)
