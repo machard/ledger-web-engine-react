@@ -1,6 +1,6 @@
 {
   "name": "ledger-web-engine-react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "the component that runs ledger web apps",
   "author": "machard",
   "license": "MIT",
