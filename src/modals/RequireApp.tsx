@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useCallback, useContext, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 import { DialogActions, DialogContent, DialogTitle } from '../components/Dialog'
 import { Button, Dialog } from '@material-ui/core'
@@ -74,6 +74,10 @@ function RequireApp(props: Props) {
   const { app, handleCancel, handleSuccess } = props
   const devices = useContext(devicesContext)
 
+  const handleWakeup = useCallback(() => {
+    setTransport(null)
+  }, [])
+
   useEffect(() => {
     if (!devices.transport) {
       return
@@ -86,7 +90,9 @@ function RequireApp(props: Props) {
         return
       }
       try {
+        const t = setTimeout(handleWakeup, 1000)
         await ensureAppOpen(devices.transport, app.name, handleSuccess)
+        clearTimeout(t)
       } catch (e) {
         await delay(200)
         ensure()
@@ -124,10 +130,6 @@ function RequireApp(props: Props) {
       stop = true
     }
   }, [devices.transport])
-
-  const handleWakeup = () => {
-    setTransport(null)
-  }
 
   return (
     <Dialog
