@@ -47,6 +47,9 @@ const DevicesProvider = ({
 
   getTransport = () => state.transport
   setTransport = (transport: any) => {
+    if (state.transport) {
+      state.transport._events.removeAllListeners()
+    }
     dispatch({
       type: 'transport',
       transport
